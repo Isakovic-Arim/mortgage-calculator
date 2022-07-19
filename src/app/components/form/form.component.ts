@@ -32,7 +32,7 @@ import { FormGroup, FormControl } from '@angular/forms';
     <fieldset>
       <legend>Estimated pr. month:</legend>
       <div class="text-lg font-bold">
-        $ {{ (monthlyPrice) }}
+        $ {{ numberWithCommas(monthlyPrice) }}
       </div>
     </fieldset>
   </div>
@@ -64,8 +64,8 @@ export class FormComponent {
     this.interestRate  = this.mortgage.value.interestRate * 0.01 / 12;
 
     this.loanAmount    = this.purchasePrize - this.downPayment;
-    this.monthlyPrice = Math.floor((this.loanAmount * (this.interestRate * Math.pow((1 + this.interestRate), (this.repaymentTime))) 
-                        / (Math.pow((1 + this.interestRate), (this.repaymentTime)) - 1)));
+    this.monthlyPrice  = Math.floor((this.loanAmount * (this.interestRate * Math.pow((1 + this.interestRate), this.repaymentTime)) 
+                        / (Math.pow((1 + this.interestRate), this.repaymentTime) - 1)));
   }
 
   numberWithCommas(x: number | undefined | null) {
