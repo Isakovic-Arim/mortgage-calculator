@@ -57,15 +57,23 @@ export class FormComponent {
   loanAmount:    number = 0;
   monthlyPrice:  number = 0;
 
+  isValid() {
+    return this.purchasePrize > this.downPayment;
+  }
+
+  getMortgage() {
+    return Math.floor((this.loanAmount * (this.interestRate * Math.pow((1 + this.interestRate), this.repaymentTime)) 
+    / (Math.pow((1 + this.interestRate), this.repaymentTime) - 1)));
+  }
+
   onSubmit() {
     this.purchasePrize = this.mortgage.value.purchasePrize;
     this.downPayment   = this.mortgage.value.downPayment;
     this.repaymentTime = this.mortgage.value.repaymentTime * 12;
     this.interestRate  = this.mortgage.value.interestRate * 0.01 / 12;
 
-    this.loanAmount    = this.purchasePrize - this.downPayment;
-    this.monthlyPrice  = Math.floor((this.loanAmount * (this.interestRate * Math.pow((1 + this.interestRate), this.repaymentTime)) 
-                        / (Math.pow((1 + this.interestRate), this.repaymentTime) - 1)));
+    this.loanAmount    = this.isValid() ? this.purchasePrize - this.downPayment : 0;
+    this.monthlyPrice  = this.loanAmount > 0 && (this.repaymentTime > 0 && this.interestRate > 0) ? this.getMortgage() : 0;
   }
 
   numberWithCommas(x: number | undefined | null) {
